@@ -24,41 +24,41 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
 
 void gpio_writePort( GPIOx *port, uint32_t value )
 {
-    port->BSRR |= 0xFFFF0000u;
-    port->ODR ^= (value & 0xFFFFu);
+    port->BSRR = 0xFFFF0000u;
+    port->BSRR = (value & 0xFFFFu);
 }
 
 uint32_t gpio_readPort( GPIOx *port )
 {
-    int value = 0;
+    uint32_t value = 0;
     value |= port->IDR;
     return value;
 }
 
 void gpio_setPins( GPIOx *port, uint32_t pins )
 {
-    port->BSRR |= (0xFFFFu & pins);
+    port->BSRR = (0xFFFFu & pins);
 }
 
 void gpio_resetPins( GPIOx *port, uint32_t pins )
 {
-    port->BSRR |= (pins << 16);
+    port->BSRR = (pins << 16);
 }
 
 void gpio_togglePins( GPIOx *port, uint32_t pins )
 {
-    port->ODR ^= (0xFFFFu & pins);
+    port->ODR ^= (0xFFFFu & pins); // (no read/modify/write) avoid irq 
 }
 
 void gpio_writePins( GPIOx *port, uint32_t pins, uint32_t value )
 {
     if(value != 0)
     {
-        port->BSRR |= (0xFFFFu & pins);
+        port->BSRR = (0xFFFFu & pins);
     }
     else
     {
-        port->BSRR |= (pins << 16);
+        port->BSRR = (pins << 16);
     }
 }
 
