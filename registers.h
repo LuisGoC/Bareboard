@@ -3,6 +3,37 @@
 
 #include "types.h"
 
+typedef enum{
+     WWDG_IRQn, 
+     RTC_IRQn = 2, 
+     FLASH_IRQn, 
+     RCC_IRQn, 
+     EXTI0_1_IRQn, 
+     EXTI2_3_IRQn, 
+     EXTI4_15_IRQn, 
+     DMA_CH1_IRQn = 9, 
+     DMA_CH2_3_IRQn, 
+     DMA_CH4_5_IRQn,
+     ADC_IRQn,
+     TIM1_BRK_UP_TRG_COM_IRQn,
+     TIM1_CC_IRQn,
+     TIM3_IRQn = 16,
+     TIM6_IRQn,
+     TIM7_IRQn,
+     TIM14_IRQn,
+     TIM15_IRQn,
+     TIM16_IRQn,
+     TIM17_IRQn,
+     I2C1_IRQn,
+     I2C2_IRQn,
+     SPI1_IRQn,
+     SPI2_IRQn,
+     USART1_IRQn,
+     USART2_IRQn,
+     USART3_4_5_6_IRQn,
+     USB_IRQn = 31
+}_irq_t;
+
 typedef struct {
      uint32_t MODER;
      uint32_t OTYPER;
@@ -38,7 +69,8 @@ typedef struct {
 #define GPIOB_START ((GPIOx *)0x48000400)
 #define GPIOC_START ((GPIOx *)0x48000800)
 #define GPIOD_START ((GPIOx *)0x48000C00)
-
 #define RCC_START ((RCC *)0x40021000)
+
+//add NVIC addresses
 
 #endif
