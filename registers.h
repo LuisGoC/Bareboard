@@ -69,8 +69,14 @@ typedef struct {
 #define GPIOB_START ((GPIOx *)0x48000400)
 #define GPIOC_START ((GPIOx *)0x48000800)
 #define GPIOD_START ((GPIOx *)0x48000C00)
-#define RCC_START ((RCC *)0x40021000)
+
+#define RCC_START   ((RCC *)0x40021000)
 
 //add NVIC addresses
+#define ISER_START ((uint32_t*)0xE000E100)
+#define ICER_START ((uint32_t*)0xE000E180)
+#define ISPR_START ((uint32_t*)0xE000E200)
+#define ICPR_START ((uint32_t*)0xE000E280)
+#define IPRx_START ((uint32_t*)0xE000E400)
 
 #endif
