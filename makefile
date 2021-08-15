@@ -4,7 +4,7 @@ CFLAGS= -c -mcpu=$(MACH) -mthumb -mfloat-abi=soft -std=gnu99 -Wall -O0 #-g (for 
 LDFLAGS= -mcpu=$(MACH) -mthumb -mfloat-abi=soft --specs=nano.specs -T stm32_linker.ld -Wl,-Map=final.map
 #LDFLAGS_SH= -mcpu=$(MACH) -mthumb -mfloat-abi=soft --specs=rdimon.specs -T stm32_linker.ld -Wl,-Map=final.map
 
-all:main.o stm32_startup.o syscalls.o GPIO.o final.elf
+all:main.o stm32_startup.o syscalls.o GPIO.o NVIC.o final.elf
 
 semi:main.o stm32_startup.o syscalls.o final_sh.elf
 
@@ -20,7 +20,10 @@ syscalls.o:syscalls.c
 GPIO.o:GPIO.c
 	$(CC) $(CFLAGS) -o $@ $^
 
-final.elf: main.o stm32_startup.o syscalls.o GPIO.o
+NVIC.o:NVIC.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+final.elf: main.o stm32_startup.o syscalls.o GPIO.o NVIC.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 final_sh.elf: main.o stm32_startup.o 

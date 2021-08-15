@@ -17,7 +17,15 @@ void nvic_SetPriority( _irq_t irq, uint32_t priority )
 
 uint32_t nvic_GetPriority( _irq_t irq )
 {
-    
+    uint32_t *pIPRx = IPRx_START;
+    uint8_t position;
+    uint32_t priority;
+
+    pIPRx = pIPRx + (irq/4);
+    position = (irq % 4) * 8;
+    priority = (*pIPRx >> (position + 6)) & 3;  
+
+    return priority;
 }
 
 void nvic_EnableIrq( _irq_t irq )
