@@ -4,9 +4,12 @@
 #include "NVIC.h"
 #define LED_PIN      5
 
+//extern void initialise_monitor_handles(void);
+
 int main ( void )
 {
-
+    //initialise_monitor_handles();
+    //printf("\n");
     /* Enable clock for GPIO port A, RCC_AHBENR bit  */
     RCC_GPIOA_CLOCK_ON();
 
@@ -19,6 +22,7 @@ int main ( void )
 
     nvic_SetPriority(RTC_IRQn, 2);
     nvic_EnableIrq(RTC_IRQn);
+    //printf("%d\n", nvic_GetPendingIrq(RTC_IRQn));
     
     for(;;)
     {

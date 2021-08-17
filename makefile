@@ -1,12 +1,12 @@
 CC= arm-none-eabi-gcc
 MACH= cortex-m0
-CFLAGS= -c -mcpu=$(MACH) -mthumb -mfloat-abi=soft -std=gnu99 -Wall -O0 #-g (for debug)
+CFLAGS= -c -mcpu=$(MACH) -mthumb -mfloat-abi=soft -std=gnu99 -Wall -O0 -g #(for debug)
 LDFLAGS= -mcpu=$(MACH) -mthumb -mfloat-abi=soft --specs=nano.specs -T stm32_linker.ld -Wl,-Map=final.map
 #LDFLAGS_SH= -mcpu=$(MACH) -mthumb -mfloat-abi=soft --specs=rdimon.specs -T stm32_linker.ld -Wl,-Map=final.map
 
 all:main.o stm32_startup.o syscalls.o GPIO.o NVIC.o final.elf
 
-semi:main.o stm32_startup.o syscalls.o final_sh.elf
+semi:main.o stm32_startup.o syscalls.o GPIO.o NVIC.o final_sh.elf
 
 main.o:main.c
 	$(CC) $(CFLAGS) -o $@ $^
@@ -26,7 +26,7 @@ NVIC.o:NVIC.c
 final.elf: main.o stm32_startup.o syscalls.o GPIO.o NVIC.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
-final_sh.elf: main.o stm32_startup.o 
+final_sh.elf: main.o stm32_startup.o GPIO.o NVIC.o
 	$(CC) $(LDFLAGS_SH) -o $@ $^
 
 clean: 
@@ -34,6 +34,9 @@ clean:
 
 load:
 	openocd -f board/st_nucleo_f0.cfg 
+
+debug:
+	arm-none-eabi-gdb.exe final.elf -x=commands.gdb
 
 flash: clean|all
 

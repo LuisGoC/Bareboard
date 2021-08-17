@@ -45,8 +45,11 @@ void nvic_DisableIrq( _irq_t irq )
 uint32_t nvic_GetPendingIrq( _irq_t irq )
 {
     uint32_t *pISPR = ISPR_START;
+    uint32_t reg;
 
-    return *pISPR;
+    reg = (*pISPR >> irq) & 1;
+
+    return reg;
 }
 
 void nvic_SetPendingIrq( _irq_t irq )
