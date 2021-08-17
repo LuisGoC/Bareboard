@@ -4,64 +4,54 @@
 
 void nvic_SetPriority( _irq_t irq, uint32_t priority )
 {
-    uint32_t *pIPRx = IPRx_START;
     uint8_t position;
+    uint8_t reg;
 
-    pIPRx = pIPRx + (irq/4);
-    
     position = (irq % 4) * 8;
+    reg = irq/4;
     
-    *pIPRx &= ~(0xFF << position); //clar bits
-    *pIPRx |= ((priority & 3) << (position + 6)); // write bits
+    NVIC_START->IPR[reg] &= ~(0xFF << position); //clar bits
+    NVIC_START->IPR[reg] |= ((priority & 3) << (position + 6)); // write bits
 }
 
 uint32_t nvic_GetPriority( _irq_t irq )
 {
-    uint32_t *pIPRx = IPRx_START;
     uint8_t position;
+    uint8_t reg;
     uint32_t priority;
 
-    pIPRx = pIPRx + (irq/4);
     position = (irq % 4) * 8;
-    priority = (*pIPRx >> (position + 6)) & 3;  
+    reg = irq/4;
+    priority = (NVIC_START->IPR[reg] >> (position + 6)) & 3;  
 
     return priority;
 }
 
 void nvic_EnableIrq( _irq_t irq )
 {
-    uint32_t *pISER = ISER_START;
-
-    *pISER |= (1 << (irq % 32));
+    BIT_SET(NVIC_START->ISER, irq);
 }
 
 void nvic_DisableIrq( _irq_t irq )
 {
-    uint32_t *pICER = ICER_START;
-
-    *pICER |= (1 << (irq % 32));
+    BIT_SET(NVIC_START->ICER, irq);
 }
 
 uint32_t nvic_GetPendingIrq( _irq_t irq )
 {
-    uint32_t *pISPR = ISPR_START;
     uint32_t reg;
 
-    reg = (*pISPR >> irq) & 1;
+    reg = (NVIC_START->ISPR >> irq) & 1;
 
     return reg;
 }
 
 void nvic_SetPendingIrq( _irq_t irq )
 {
-    uint32_t *pISPR = ISPR_START;
-
-    *pISPR |= (1 << (irq % 32));
+    BIT_SET(NVIC_START->ISPR, irq);
 }
 
 void nvic_ClearPendingIrq( _irq_t irq )
 {
-    uint32_t *pICPR = ICPR_START;
-
-    *pICPR |= (1 << (irq % 32));
+    BIT_SET(NVIC_START->ICPR, irq);
 }

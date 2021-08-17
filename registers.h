@@ -65,6 +65,18 @@ typedef struct {
      uint32_t CR2;
 }RCC;
 
+typedef struct {
+     uint32_t ISER;
+     uint32_t reserved_0[31];
+     uint32_t ICER;
+     uint32_t reserved_1[31];
+     uint32_t ISPR;
+     uint32_t reserved_2[31];
+     uint32_t ICPR;
+     uint32_t reserved_3[95];
+     uint32_t IPR[7];
+}NVIC;
+
 #define GPIOA_START ((GPIOx *)0x48000000)
 #define GPIOB_START ((GPIOx *)0x48000400)
 #define GPIOC_START ((GPIOx *)0x48000800)
@@ -73,10 +85,11 @@ typedef struct {
 #define RCC_START   ((RCC *)0x40021000)
 
 //add NVIC addresses
-#define ISER_START ((uint32_t*)0xE000E100)
-#define ICER_START ((uint32_t*)0xE000E180)
-#define ISPR_START ((uint32_t*)0xE000E200)
-#define ICPR_START ((uint32_t*)0xE000E280)
-#define IPRx_START ((uint32_t*)0xE000E400)
+#define NVIC_START ((NVIC *)0xE000E100)
+// #define ISER_START ((uint32_t*)0xE000E100)
+// #define ICER_START ((uint32_t*)0xE000E180)
+// #define ISPR_START ((uint32_t*)0xE000E200)
+// #define ICPR_START ((uint32_t*)0xE000E280)
+// #define IPRx_START ((uint32_t*)0xE000E400)
 
 #endif
