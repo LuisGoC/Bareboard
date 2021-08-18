@@ -1,32 +1,21 @@
+OBJS= main.o stm32_startup.o syscalls.o GPIO.o NVIC.o
 CC= arm-none-eabi-gcc
 MACH= cortex-m0
 CFLAGS= -c -mcpu=$(MACH) -mthumb -mfloat-abi=soft -std=gnu99 -Wall -O0 -g #(for debug)
 LDFLAGS= -mcpu=$(MACH) -mthumb -mfloat-abi=soft --specs=nano.specs -T stm32_linker.ld -Wl,-Map=final.map
 #LDFLAGS_SH= -mcpu=$(MACH) -mthumb -mfloat-abi=soft --specs=rdimon.specs -T stm32_linker.ld -Wl,-Map=final.map
 
-all:main.o stm32_startup.o syscalls.o GPIO.o NVIC.o final.elf
+all: $(OBJS) final.elf
 
-semi:main.o stm32_startup.o syscalls.o GPIO.o NVIC.o final_sh.elf
+semi: $(OBJS) final_sh.elf
 
-main.o:main.c
-	$(CC) $(CFLAGS) -o $@ $^
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ $<
 
-stm32_startup.o:stm32_startup.c
-	$(CC) $(CFLAGS) -o $@ $^
-
-syscalls.o:syscalls.c
-	$(CC) $(CFLAGS) -o $@ $^
-
-GPIO.o:GPIO.c
-	$(CC) $(CFLAGS) -o $@ $^
-
-NVIC.o:NVIC.c
-	$(CC) $(CFLAGS) -o $@ $^
-
-final.elf: main.o stm32_startup.o syscalls.o GPIO.o NVIC.o
+final.elf: $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^
 
-final_sh.elf: main.o stm32_startup.o GPIO.o NVIC.o
+final_sh.elf: $(OBJS)
 	$(CC) $(LDFLAGS_SH) -o $@ $^
 
 clean: 
