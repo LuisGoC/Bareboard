@@ -6,6 +6,7 @@
 
 //extern void initialise_monitor_handles(void);
 static gpioConfig_t gpioHandle;
+volatile uint8_t buttonFlag = 0;
 
 int main ( void )
 {
@@ -31,11 +32,11 @@ int main ( void )
     
     for(;;)
     {
-        /* Toggle pin 5 from port A */
-        //nvic_SetPendingIrq(RTC_IRQn);
-
-        /* simple and practical delay */
-        //_delay(1000000);
+        if(buttonFlag == 1)
+        {
+            gpio_togglePins(GPIOA_START, GPIO_PIN_5);
+            _delay(100000);
+        }
     }
 }
 
@@ -46,5 +47,13 @@ void EXTI4_15_IRQHandler(void)
 
 void gpio_isrCallback( uint32_t pin )
 {
-    gpio_togglePins(GPIOA_START, GPIO_PIN_5);   
+    if (buttonFlag != 0)
+    {
+        buttonFlag = 0;
+        gpio_writePins(GPIOA_START, GPIO_PIN_5, 0);
+    }
+    else
+    {
+        buttonFlag = 1;
+    }
 }
