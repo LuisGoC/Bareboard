@@ -11,6 +11,8 @@ void nvic_DisableIrq( _irq_t irq );
 uint32_t nvic_GetPendingIrq( _irq_t irq );
 void nvic_SetPendingIrq( _irq_t irq );
 void nvic_ClearPendingIrq( _irq_t irq );
+void gpio_isrHandler( uint32_t pin );
+void gpio_isrCallback( uint32_t pin ) __attribute__((weak));
 
 
 #endif

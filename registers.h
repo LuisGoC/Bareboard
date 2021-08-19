@@ -77,6 +77,22 @@ typedef struct {
      uint32_t IPR[7];
 }NVIC;
 
+typedef struct {
+     uint32_t IMR;
+     uint32_t EMR;
+     uint32_t RTSR;
+     uint32_t FTSR;
+     uint32_t SWIER;
+     uint32_t PR;
+}EXTI;
+
+typedef struct {
+     uint32_t CFGR1;
+     uint32_t reserved;
+     uint32_t EXTICR[3];
+     uint32_t CFGR2;
+}SYSCFG;
+
 #define GPIOA_START ((GPIOx *)0x48000000)
 #define GPIOB_START ((GPIOx *)0x48000400)
 #define GPIOC_START ((GPIOx *)0x48000800)
@@ -91,5 +107,9 @@ typedef struct {
 // #define ISPR_START ((uint32_t*)0xE000E200)
 // #define ICPR_START ((uint32_t*)0xE000E280)
 // #define IPRx_START ((uint32_t*)0xE000E400)
+
+#define EXTI_START ((EXTI *)0x40010400)
+
+#define SYSCFG_START ((SYSCFG *)0x40010000)
 
 #endif

@@ -22,14 +22,23 @@
 #define GPIO_PIN_15  ((uint16_t)0x8000)
 #define GPIO_PIN_ALL ((uint16_t)0xFFFF) 
 
-#define GPIO_MODE_INPUT   ((uint32_t)0x00000000)
-#define GPIO_MODE_OUTPUT  ((uint32_t)0x00000001)
-#define GPIO_MODE_ALT     ((uint32_t)0x00000002)
-#define GPIO_MODE_ANALOG  ((uint32_t)0x00000003)
+#define GPIO_MODE_INPUT       ((uint32_t)0x00000000)
+#define GPIO_MODE_OUTPUT      ((uint32_t)0x00000001)
+#define GPIO_MODE_ALT         ((uint32_t)0x00000002)
+#define GPIO_MODE_ANALOG      ((uint32_t)0x00000003)
+#define GPIO_MODE_IT_FALLING  ((uint32_t)0x00000004)
+#define GPIO_MODE_IT_RISING   ((uint32_t)0x00000005)
+#define GPIO_MODE_IT_BOTH     ((uint32_t)0x00000006)
 
 #define GPIO_NOPULL    	  ((uint32_t)0x00000000)
 #define GPIO_PULLUP    	  ((uint32_t)0x00000001)
 #define GPIO_PULLDOWN     ((uint32_t)0x00000002)
+
+#define GPIO_ADDRESS_TO_CODE(x)  ( (x == GPIOA_START) ? 0 : \
+                                   (x == GPIOB_START) ? 1 : \
+                                   (x == GPIOC_START) ? 2 : \
+                                   (x == GPIOD_START) ? 3 : 0 )
+
 
 typedef struct
 {
