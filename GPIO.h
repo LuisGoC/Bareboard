@@ -56,5 +56,8 @@ void gpio_resetPins( GPIOx *port, uint32_t pins );
 void gpio_togglePins( GPIOx *port, uint32_t pins );
 void gpio_writePins( GPIOx *port, uint32_t pins, uint32_t value );
 uint32_t gpio_readPin( GPIOx *port, uint32_t pin );
+void gpio_isrHandler( uint32_t pin );
+void gpio_isrCallback( uint32_t pin );
+
 
 #endif

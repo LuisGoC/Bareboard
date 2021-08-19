@@ -89,7 +89,7 @@ typedef struct {
 typedef struct {
      uint32_t CFGR1;
      uint32_t reserved;
-     uint32_t EXTICR[3];
+     uint32_t EXTICR[4];
      uint32_t CFGR2;
 }SYSCFG;
 

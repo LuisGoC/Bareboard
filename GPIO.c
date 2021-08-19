@@ -7,7 +7,7 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
 {
     int8_t PinPosition = 0;
 
-    while((config->Pin >> PinPosition) != 0) ///////////////////////HGGHFDHdfghdf
+    while((config->Pin >> PinPosition) != 0) 
     {
         if(BIT_STATE(config->Pin, PinPosition) == 1)
         {
@@ -21,8 +21,6 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
             }
             else
             {
-                RCC_SYSCFG_CLOCK_ON();
-
                 if(config->Mode == GPIO_MODE_IT_FALLING)
                 {
                     BIT_SET(EXTI_START->FTSR, PinPosition);
@@ -38,9 +36,9 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
                     BIT_SET(EXTI_START->FTSR, PinPosition);
                     BIT_SET(EXTI_START->RTSR, PinPosition);
                 } 
-
+                
+                RCC_SYSCFG_CLOCK_ON();
                 SYSCFG_START->EXTICR[PinPosition/4] = GPIO_ADDRESS_TO_CODE(port) << ((PinPosition % 4) << 2); 
-
                 BIT_SET(EXTI_START->IMR, PinPosition);
             }
         }
@@ -106,9 +104,15 @@ uint32_t gpio_readPin( GPIOx *port, uint32_t pin )
 
 void gpio_isrHandler( uint32_t pin )
 {
-    if(BIT_STATE(EXTI_START->PR, pin))
+    uint8_t PinPosition = 0;
+    while((pin >> PinPosition) != 0) 
     {
-        BIT_SET(EXTI_START->PR, pin);
+        if(BIT_STATE(EXTI_START->PR, PinPosition))
+        {
+            BIT_SET(EXTI_START->PR, PinPosition);
+            gpio_isrCallback(PinPosition);
+        }
+        PinPosition++;
     }
 }
 
