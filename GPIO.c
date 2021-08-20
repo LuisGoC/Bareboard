@@ -21,6 +21,7 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
             }
             else
             {
+                /*Interrupt mode*/
                 if(config->Mode == GPIO_MODE_IT_FALLING)
                 {
                     BIT_SET(EXTI_START->FTSR, PinPosition);

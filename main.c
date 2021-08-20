@@ -21,7 +21,7 @@ int main ( void )
     gpioHandle.Pull = GPIO_NOPULL;
     gpio_configPort(GPIOA_START, &gpioHandle);
 
-    gpioHandle.Mode = GPIO_MODE_IT_FALLING;
+    gpioHandle.Mode = GPIO_MODE_IT_BOTH;
     gpioHandle.Pin = GPIO_PIN_13;
     gpioHandle.Pull = GPIO_NOPULL;
     gpio_configPort(GPIOC_START, &gpioHandle);
@@ -34,8 +34,8 @@ int main ( void )
     {
         if(buttonFlag == 1)
         {
+            buttonFlag = 0;
             gpio_togglePins(GPIOA_START, GPIO_PIN_5);
-            _delay(100000);
         }
     }
 }
@@ -47,12 +47,7 @@ void EXTI4_15_IRQHandler(void)
 
 void gpio_isrCallback( uint32_t pin )
 {
-    if (buttonFlag != 0)
-    {
-        buttonFlag = 0;
-        gpio_writePins(GPIOA_START, GPIO_PIN_5, 0);
-    }
-    else
+    if(pin == GPIO_PIN_13)
     {
         buttonFlag = 1;
     }
