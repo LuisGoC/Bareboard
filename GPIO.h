@@ -30,6 +30,15 @@
     #define GPIO_MODE_IT_RISING   ((uint32_t)0x00000005)
     #define GPIO_MODE_IT_BOTH     ((uint32_t)0x00000006)
 
+    #define GPIO_AF0      ((uint32_t)0x00000000)
+    #define GPIO_AF1      ((uint32_t)0x00000001)
+    #define GPIO_AF2      ((uint32_t)0x00000002)
+    #define GPIO_AF3      ((uint32_t)0x00000003)
+    #define GPIO_AF4      ((uint32_t)0x00000004)
+    #define GPIO_AF5      ((uint32_t)0x00000005)
+    #define GPIO_AF6      ((uint32_t)0x00000006)
+    #define GPIO_AF7      ((uint32_t)0x00000007)
+
     #define GPIO_NOPULL    	  ((uint32_t)0x00000000)
     #define GPIO_PULLUP    	  ((uint32_t)0x00000001)
     #define GPIO_PULLDOWN     ((uint32_t)0x00000002)

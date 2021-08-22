@@ -43,8 +43,7 @@
           uint32_t ODR;
           uint32_t BSRR;
           uint32_t LCKR;
-          uint32_t AFRL;
-          uint32_t AFRH;
+          uint32_t AFR[2];
           uint32_t BRR;
      }GPIOx;
 

@@ -18,6 +18,12 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
 
                 port->PUPDR &= ~(3 << (PinPosition << 1));
                 port->PUPDR |= (config->Pull << (PinPosition << 1));
+
+                if(config->Mode == GPIO_MODE_ALT)
+                {
+                    port->AFR[PinPosition/8] &= ~(0xFu << ((PinPosition % 8) << 2));
+                    port->AFR[PinPosition/8] |= ((config->Alternate & 0xFu) << ((PinPosition % 8) << 2));
+                }
             }
             else
             {
