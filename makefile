@@ -1,4 +1,4 @@
-OBJS= main.o stm32_startup.o syscalls.o GPIO.o NVIC.o
+OBJS= main.o stm32_startup.o syscalls.o GPIO.o NVIC.o UART.o
 CC= arm-none-eabi-gcc
 MACH= cortex-m0
 CFLAGS= -c -mcpu=$(MACH) -mthumb -mfloat-abi=soft -std=gnu99 -Wall -O0 -g #(for debug)
