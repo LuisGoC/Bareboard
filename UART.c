@@ -62,10 +62,10 @@ void uart_sendBuffer( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
         if(BIT_STATE(uartH->uart->ISR, USART_ISR_TXE))
         {
             uartH->uart->TDR = ptr[count];
-            while(BIT_STATE(uartH->uart->ISR, USART_ISR_TC) != 1)
-            {
+            //while(BIT_STATE(uartH->uart->ISR, USART_ISR_TC) != 1)
+            //{
                 //wait for TC bit flag
-            }
+            //}
             count++;
         }
     }
@@ -73,26 +73,53 @@ void uart_sendBuffer( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 
 void uart_sendBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-    
+    if(ptr != 0 && len !=0)
+    {
+        uartH->pTxData = ptr;
+        uartH->TxLen = len;
+        BIT_SET(uartH->uart->CR1, USART_CR1_TXEIE);
+    }
 }
 
 void uart_receiveBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-    BIT_SET(uartH->uart->CR1, USART_CR1_RXNEIE);
-    
+    if(ptr != 0 && len !=0)
+    {
+        uartH->pRxData = ptr;
+        uartH->RxLen = len;
+        BIT_SET(uartH->uart->CR1, USART_CR1_RXNEIE);
+    }
 }
 
 void uart_isrHandler( uartConfig_t *uartH )
 {
-    if(BIT_STATE(uartH->uart->ISR, USART_ISR_RXNE))
+    if(BIT_STATE(uartH->uart->ISR, USART_ISR_RXNE) != 0 && BIT_STATE(uartH->uart->CR1, USART_CR1_RXNEIE) != 0)
     {
-        BIT_RESET(uartH->uart->CR1, USART_CR1_RXNEIE);
-        uart_isrRxCallback( uartH );
+        if(uartH->RxLen > 0)
+        {
+            *uartH->pRxData = (uint8_t) uartH->uart->RDR;
+            uartH->RxLen--;
+        }
+        else
+        {
+            BIT_RESET(uartH->uart->CR1, USART_CR1_RXNEIE);
+            uart_isrRxCallback( uartH );
+        }
+        uartH->pRxData++;
     }
-    if(BIT_STATE(uartH->uart->ISR, USART_ISR_TC))
+    if(BIT_STATE(uartH->uart->ISR, USART_ISR_TXE))
     {
-        BIT_RESET(uartH->uart->CR1, USART_CR1_TCIE);
-        uart_isrTxCallback( uartH );
+        if(uartH->TxLen > 0)
+        {
+            uartH->uart->TDR = *uartH->pTxData;
+            uartH->TxLen--;
+        }
+        else
+        {
+            BIT_RESET(uartH->uart->CR1, USART_CR1_TXEIE);
+            uart_isrTxCallback( uartH );
+        }
+        uartH->pTxData++;
     }
 }
 

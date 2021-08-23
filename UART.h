@@ -58,6 +58,10 @@
         uint32_t OverSampling;
         uint32_t Parity;
         uint32_t TxRxMode; 
+        uint8_t *pRxData;
+        uint8_t RxLen;
+        uint8_t *pTxData;
+        uint8_t TxLen;
     }uartConfig_t;
 
 void uart_configPort( uartConfig_t *uartH );

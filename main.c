@@ -9,6 +9,7 @@
 static gpioConfig_t gpioHandle;
 static uartConfig_t uartHandle;
 //volatile uint8_t buttonFlag = 0;
+uint8_t b[10];
 
 int main ( void )
 {
@@ -41,6 +42,7 @@ int main ( void )
     // nvic_EnableIrq(EXTI4_15_IRQn);
     //printf("%d\n", nvic_GetPendingIrq(RTC_IRQn));
     uint8_t a[5] = {'H', 'O', 'L', 'A'};
+    
 
     for(;;)
     {
@@ -49,9 +51,15 @@ int main ( void )
         //     buttonFlag = 0;
         //     gpio_togglePins(GPIOA_START, GPIO_PIN_5);
         // }
-        gpio_togglePins(GPIOA_START, GPIO_PIN_5);
-        uart_sendBuffer(&uartHandle, a, 4);
-        _delay(1000000);
+
+        // gpio_togglePins(GPIOA_START, GPIO_PIN_5);
+        // uart_sendBuffer(&uartHandle, a, 4);
+
+        //uart_receiveBufferInt(&uartHandle, b, 3);
+        
+        uart_sendBufferInt(&uartHandle, a, 4);
+
+        _delay(100000);
     }
 }
 
@@ -78,11 +86,22 @@ void uart_mspInit( uartConfig_t *uartH )
     gpioHandle2.Pull = GPIO_NOPULL;
     gpioHandle2.Alternate = GPIO_AF1;
     gpio_configPort(GPIOA_START, &gpioHandle2);
-    // HAL_NVIC_SetPriority(USART2_IRQn, 1, 0);
-    // HAL_NVIC_EnableIRQ(USART2_IRQn);
+    nvic_SetPriority(USART2_IRQn, 2);
+    nvic_EnableIrq(USART2_IRQn);
 }
 
 void USART2_IRQHandler(void)
 {
     uart_isrHandler( &uartHandle );
+}
+
+void uart_isrRxCallback( uartConfig_t *uart )
+{
+    gpio_togglePins(GPIOA_START, GPIO_PIN_5);
+    uart_sendBuffer(&uartHandle, b, 3);
+}
+
+void uart_isrTxCallback( uartConfig_t *uart )
+{
+    gpio_togglePins(GPIOA_START, GPIO_PIN_5);
 }
