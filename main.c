@@ -25,6 +25,7 @@ int main ( void )
     
     uartHandle.uart = USART2_START;
     uartHandle.BaudRate = 9600;
+    uartHandle.TxRxMode = UART_MODE_TX_RX;
     uartHandle.OverSampling = UART_OVERSAMPLING_16;
     uartHandle.Parity = UART_PARITY_NONE;
     uartHandle.StopBits = UART_STOPBITS_1;
@@ -79,4 +80,9 @@ void uart_mspInit( uartConfig_t *uartH )
     gpio_configPort(GPIOA_START, &gpioHandle2);
     // HAL_NVIC_SetPriority(USART2_IRQn, 1, 0);
     // HAL_NVIC_EnableIRQ(USART2_IRQn);
+}
+
+void USART2_IRQHandler(void)
+{
+    uart_isrHandler( &uartHandle );
 }

@@ -45,6 +45,7 @@
 
     #define USART_ISR_TXE    7u
     #define USART_ISR_TC     6u
+    #define USART_ISR_RXNE   5u
 
     #define SYSTEM_CLOCK_FREQ     8000000u
 

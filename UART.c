@@ -37,8 +37,8 @@ void uart_configPort( uartConfig_t *uartH )
     uartH->uart->CR2 |= ((uartH->StopBits & 3) << USART_CR2_STOP);
 
     //Program TE and RE bits 
-    // uartH->uart->CR1 &= ~(3 << USART_CR1_RE);
-    // uartH->uart->CR1 |= ((uartH->TxRxMode & 3) << USART_CR1_RE);
+    uartH->uart->CR1 &= ~(3 << USART_CR1_RE);
+    uartH->uart->CR1 |= ((uartH->TxRxMode & 3) << USART_CR1_RE);
 
     //Enable the USART by writing the UE bit in USART_CR1 register to 1.
     BIT_SET(uartH->uart->CR1, USART_CR1_UE);
@@ -54,8 +54,8 @@ void uart_sendBuffer( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
     uint16_t count = 0;
 
-    uartH->uart->CR1 &= ~(1 << USART_CR1_TE);
-    uartH->uart->CR1 |= (1 << USART_CR1_TE);
+    //uartH->uart->CR1 &= ~(1 << USART_CR1_TE);
+    //uartH->uart->CR1 |= (1 << USART_CR1_TE);
     
     while(count < len)
     {
@@ -73,17 +73,27 @@ void uart_sendBuffer( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 
 void uart_sendBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-
+    
 }
 
 void uart_receiveBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-
+    BIT_SET(uartH->uart->CR1, USART_CR1_RXNEIE);
+    
 }
 
 void uart_isrHandler( uartConfig_t *uartH )
 {
-
+    if(BIT_STATE(uartH->uart->ISR, USART_ISR_RXNE))
+    {
+        BIT_RESET(uartH->uart->CR1, USART_CR1_RXNEIE);
+        uart_isrRxCallback( uartH );
+    }
+    if(BIT_STATE(uartH->uart->ISR, USART_ISR_TC))
+    {
+        BIT_RESET(uartH->uart->CR1, USART_CR1_TCIE);
+        uart_isrTxCallback( uartH );
+    }
 }
 
 __attribute__((weak)) void uart_isrTxCallback( uartConfig_t *uartH )
