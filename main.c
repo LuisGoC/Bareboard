@@ -3,18 +3,21 @@
 #include "UART.h"
 #include "RCC.h"
 #include "NVIC.h"
+#include <stdlib.h>
 #define LED_PIN      5
 
 //extern void initialise_monitor_handles(void);
 static gpioConfig_t gpioHandle;
 static uartConfig_t uartHandle;
-//volatile uint8_t buttonFlag = 0;
-uint8_t b[10];
+uint8_t RxBuffer[10];
+uint8_t RxByte;
+uint8_t counter = 0;
+volatile uint8_t stat = 0;
 
 int main ( void )
 {
-    //initialise_monitor_handles();
-    //printf("\n");
+    uint32_t delay = 10000;
+
     /* Enable clock for GPIO port A, RCC_AHBENR bit  */
     RCC_GPIOA_CLOCK_ON();
 
@@ -33,48 +36,24 @@ int main ( void )
     uartHandle.WordLength = UART_WORDLENGTH_8B;
     uart_configPort(&uartHandle);
 
-    // gpioHandle.Mode = GPIO_MODE_IT_BOTH;
-    // gpioHandle.Pin = GPIO_PIN_13;
-    // gpioHandle.Pull = GPIO_NOPULL;
-    // gpio_configPort(GPIOC_START, &gpioHandle);
-
-    // nvic_SetPriority(EXTI4_15_IRQn, 2);
-    // nvic_EnableIrq(EXTI4_15_IRQn);
-    //printf("%d\n", nvic_GetPendingIrq(RTC_IRQn));
-    uint8_t a[5] = {'H', 'O', 'L', 'A'};
-    
-
+    uart_receiveBufferInt(&uartHandle, &RxByte, 1);
     for(;;)
     {
-        // if(buttonFlag == 1)
-        // {
-        //     buttonFlag = 0;
-        //     gpio_togglePins(GPIOA_START, GPIO_PIN_5);
-        // }
-
-        // gpio_togglePins(GPIOA_START, GPIO_PIN_5);
-        // uart_sendBuffer(&uartHandle, a, 4);
-
-        //uart_receiveBufferInt(&uartHandle, b, 3);
-        
-        uart_sendBufferInt(&uartHandle, a, 4);
-
-        _delay(100000);
+        if(stat == 1)
+        {
+            stat = 0;
+            //uart_sendBuffer(&uartHandle, RxBuffer, counter);
+            delay = atoi((char *)RxBuffer);
+            for(uint8_t i = 0; i < counter; i++)
+            {
+                RxBuffer[i] = 0;
+            }
+            counter = 0;
+        }
+        gpio_togglePins(GPIOA_START, GPIO_PIN_5);
+        _delay(delay);
     }
 }
-
-// void EXTI4_15_IRQHandler(void)
-// {
-//     gpio_isrHandler(GPIO_PIN_13);
-// }
-
-// void gpio_isrCallback( uint32_t pin )
-// {
-//     if(pin == GPIO_PIN_13)
-//     {
-//         buttonFlag = 1;
-//     }
-// }
 
 void uart_mspInit( uartConfig_t *uartH )
 {
@@ -97,11 +76,19 @@ void USART2_IRQHandler(void)
 
 void uart_isrRxCallback( uartConfig_t *uart )
 {
-    gpio_togglePins(GPIOA_START, GPIO_PIN_5);
-    uart_sendBuffer(&uartHandle, b, 3);
+    static uint32_t i = 0; 
+    RxBuffer[i] = RxByte;
+    i++; 
+    if(RxBuffer[i-1] == '\r')
+    { 
+        counter = i;
+        stat = 1; 
+        i = 0; 
+    }
+    uart_receiveBufferInt(&uartHandle, &RxByte, 1);
 }
 
 void uart_isrTxCallback( uartConfig_t *uart )
 {
-    gpio_togglePins(GPIOA_START, GPIO_PIN_5);
+    // gpio_togglePins(GPIOA_START, GPIO_PIN_5);
 }

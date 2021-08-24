@@ -53,19 +53,12 @@ __attribute__((weak)) void uart_mspInit( uartConfig_t *uartH )
 void uart_sendBuffer( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
     uint16_t count = 0;
-
-    //uartH->uart->CR1 &= ~(1 << USART_CR1_TE);
-    //uartH->uart->CR1 |= (1 << USART_CR1_TE);
     
     while(count < len)
     {
         if(BIT_STATE(uartH->uart->ISR, USART_ISR_TXE))
         {
             uartH->uart->TDR = ptr[count];
-            //while(BIT_STATE(uartH->uart->ISR, USART_ISR_TC) != 1)
-            //{
-                //wait for TC bit flag
-            //}
             count++;
         }
     }
@@ -73,7 +66,7 @@ void uart_sendBuffer( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 
 void uart_sendBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-    if(ptr != 0 && len !=0)
+    if(ptr != 0 && len != 0)
     {
         uartH->pTxData = ptr;
         uartH->TxLen = len;
@@ -83,7 +76,7 @@ void uart_sendBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 
 void uart_receiveBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-    if(ptr != 0 && len !=0)
+    if(ptr != 0 && len != 0)
     {
         uartH->pRxData = ptr;
         uartH->RxLen = len;
@@ -93,19 +86,19 @@ void uart_receiveBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 
 void uart_isrHandler( uartConfig_t *uartH )
 {
-    if(BIT_STATE(uartH->uart->ISR, USART_ISR_RXNE) != 0 && BIT_STATE(uartH->uart->CR1, USART_CR1_RXNEIE) != 0)
+    if(BIT_STATE(uartH->uart->ISR, USART_ISR_RXNE))
     {
         if(uartH->RxLen > 0)
         {
             *uartH->pRxData = (uint8_t) uartH->uart->RDR;
             uartH->RxLen--;
+            uartH->pRxData++;
         }
         else
         {
             BIT_RESET(uartH->uart->CR1, USART_CR1_RXNEIE);
             uart_isrRxCallback( uartH );
         }
-        uartH->pRxData++;
     }
     if(BIT_STATE(uartH->uart->ISR, USART_ISR_TXE))
     {
