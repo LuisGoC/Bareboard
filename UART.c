@@ -66,7 +66,7 @@ void uart_sendBuffer( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 
 void uart_sendBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-    if(ptr != 0 && len != 0)
+    if((ptr != ((void *)0)) && (len != 0))
     {
         uartH->pTxData = ptr;
         uartH->TxLen = len;
@@ -76,7 +76,7 @@ void uart_sendBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 
 void uart_receiveBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len )
 {
-    if(ptr != 0 && len != 0)
+    if((ptr != ((void *)0)) && (len != 0))
     {
         uartH->pRxData = ptr;
         uartH->RxLen = len;
@@ -106,13 +106,14 @@ void uart_isrHandler( uartConfig_t *uartH )
         {
             uartH->uart->TDR = *uartH->pTxData;
             uartH->TxLen--;
+            uartH->pTxData++;
         }
         else
         {
             BIT_RESET(uartH->uart->CR1, USART_CR1_TXEIE);
             uart_isrTxCallback( uartH );
         }
-        uartH->pTxData++;
+        
     }
 }
 

@@ -4,9 +4,7 @@
 #include "RCC.h"
 #include "NVIC.h"
 #include <stdlib.h>
-#define LED_PIN      5
 
-//extern void initialise_monitor_handles(void);
 static gpioConfig_t gpioHandle;
 static uartConfig_t uartHandle;
 uint8_t RxBuffer[10];
