@@ -1,7 +1,7 @@
 #ifndef _UART_H_
     #define _UART_H_
 
-    #include "types.h"
+    #include "types.h" 
     #include "registers.h"
 
     #define UART_WORDLENGTH_8B       ((uint32_t)0x00000000)
