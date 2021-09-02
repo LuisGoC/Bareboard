@@ -1,5 +1,5 @@
-#ifndef _RCC_H_
-    #define _RCC_H_
+#ifndef RCC_H_
+    #define RCC_H_
 
     #include "types.h"
     #include "registers.h"

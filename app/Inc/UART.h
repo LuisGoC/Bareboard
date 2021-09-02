@@ -1,5 +1,5 @@
-#ifndef _UART_H_
-    #define _UART_H_
+#ifndef UART_H_
+    #define UART_H_
 
     #include "types.h" 
     #include "registers.h"

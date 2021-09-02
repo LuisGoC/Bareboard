@@ -1,5 +1,5 @@
-#ifndef _GPIO_H_
-    #define _GPIO_H_
+#ifndef GPIO_H_
+    #define GPIO_H_
 
     #include "registers.h"
     #include "types.h"
@@ -43,10 +43,10 @@
     #define GPIO_PULLUP    	  ((uint32_t)0x00000001)
     #define GPIO_PULLDOWN     ((uint32_t)0x00000002)
 
-    #define GPIO_ADDRESS_TO_CODE(x)  ( (x == GPIOA_START) ? 0 : \
-                                    (x == GPIOB_START) ? 1 : \
-                                    (x == GPIOC_START) ? 2 : \
-                                    (x == GPIOD_START) ? 3 : 0 )
+    #define GPIO_ADDRESS_TO_CODE(x)  ( ((x) == GPIOA_START) ? 0UL : \
+                                    ((x) == GPIOB_START) ? 1UL : \
+                                    ((x) == GPIOC_START) ? 2UL : \
+                                    ((x) == GPIOD_START) ? 3UL : 0UL )
 
 
     typedef struct

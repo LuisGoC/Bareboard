@@ -1,5 +1,5 @@
-#ifndef _NVIC_H_
-    #define _NVIC_H_
+#ifndef NVIC_H_
+    #define NVIC_H_
 
     #include "registers.h"
     #include "types.h"

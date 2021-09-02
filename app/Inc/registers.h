@@ -1,5 +1,5 @@
-#ifndef _REGISTERS_H_
-     #define _REGISTERS_H_
+#ifndef REGISTERS_H_
+     #define REGISTERS_H_
 
      #include "types.h"
 

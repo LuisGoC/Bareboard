@@ -1,5 +1,5 @@
-#ifndef _TYPES_H_
-    #define _TYPES_H_
+#ifndef TYPES_H_
+    #define TYPES_H_
 
     // #define int8_t signed char
     // #define uint8_t unsigned char
@@ -18,10 +18,10 @@
     #define LEFT_SHIFT( var, bits )   ((var) << (bits))
     #define RIGHT_SHIFT( var, bits )  ((var) >> (bits))
     //#define BIT_STATE( var, bit )     ((var) >> ((bit) & 1)) 
-    #define BIT_STATE( var, bit )     ((((var) >> (bit)) & 1) != 0 ? 1 : 0)
-    #define BIT_SET( var, bit )       ((var) |= ( 1 << (bit)))
-    #define BIT_RESET( var, bit )     ((var) &= ~(1 << (bit)))
-    #define BIT_INVERT( var, bit )    ((var) ^= ( 1 << (bit)))
+    #define BIT_STATE( var, bit )     ((((var) >> (bit)) & 1UL) != 0UL ? 1UL : 0UL)
+    #define BIT_SET( var, bit )       ((var) |= ( 1UL << (bit)))
+    #define BIT_RESET( var, bit )     ((var) &= ~(1UL << (bit)))
+    #define BIT_INVERT( var, bit )    ((var) ^= ( 1UL << (bit)))
     #define _delay( cuentas )         for(uint32_t cDelay = 0 ; cDelay < (cuentas) ; cDelay++)
 
 #endif

@@ -1,3 +1,4 @@
 *.o
 final.elf
 final.map
+obj/

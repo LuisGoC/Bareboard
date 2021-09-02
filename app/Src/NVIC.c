@@ -4,25 +4,25 @@
 
 void nvic_SetPriority( _irq_t irq, uint32_t priority )
 {
-    uint8_t position;
+    uint32_t position;
     uint8_t reg;
 
     position = (irq % 4) * 8;
     reg = irq/4;
     
-    NVIC_START->IPR[reg] &= ~(0xFF << position); //clar bits
-    NVIC_START->IPR[reg] |= ((priority & 3) << (position + 6)); // write bits
+    NVIC_START->IPR[reg] &= ~(0xFFUL << position); //clar bits
+    NVIC_START->IPR[reg] |= ((priority & 3UL) << (position + 6UL)); // write bits
 }
 
 uint32_t nvic_GetPriority( _irq_t irq )
 {
-    uint8_t position;
+    uint32_t position;
     uint8_t reg;
     uint32_t priority;
 
     position = (irq % 4) * 8;
     reg = irq/4;
-    priority = (NVIC_START->IPR[reg] >> (position + 6)) & 3;  
+    priority = (NVIC_START->IPR[reg] >> (position + 6UL)) & 3UL;  
 
     return priority;
 }

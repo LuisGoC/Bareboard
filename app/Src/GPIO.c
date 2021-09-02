@@ -5,24 +5,24 @@
 
 void gpio_configPort( GPIOx *port, gpioConfig_t *config )
 {
-    int8_t PinPosition = 0;
+    uint32_t PinPosition = 0;
 
-    while((config->Pin >> PinPosition) != 0) 
+    while((config->Pin >> PinPosition) != 0UL) 
     {
-        if(BIT_STATE(config->Pin, PinPosition) == 1)
+        if(BIT_STATE(config->Pin, PinPosition) == 1UL)
         {
             if(config->Mode <= GPIO_MODE_ANALOG)
             {
-                port->MODER &= ~(3 << (PinPosition << 1));
-                port->MODER |= (config->Mode << (PinPosition << 1));
+                port->MODER &= ~(3UL << (PinPosition << 1UL));
+                port->MODER |= (config->Mode << (PinPosition << 1UL));
 
-                port->PUPDR &= ~(3 << (PinPosition << 1));
-                port->PUPDR |= (config->Pull << (PinPosition << 1));
+                port->PUPDR &= ~(3UL << (PinPosition << 1UL));
+                port->PUPDR |= (config->Pull << (PinPosition << 1UL));
 
                 if(config->Mode == GPIO_MODE_ALT)
                 {
-                    port->AFR[PinPosition/8] &= ~(0xFu << ((PinPosition % 8) << 2));
-                    port->AFR[PinPosition/8] |= ((config->Alternate & 0xFu) << ((PinPosition % 8) << 2));
+                    port->AFR[PinPosition/8UL] &= ~(0xFUL << ((PinPosition % 8UL) << 2UL));
+                    port->AFR[PinPosition/8UL] |= ((config->Alternate & 0xFUL) << ((PinPosition % 8UL) << 2UL));
                 }
             }
             else
@@ -45,8 +45,8 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
                 } 
                 
                 RCC_SYSCFG_CLOCK_ON();
-                SYSCFG_START->EXTICR[PinPosition/4] &=  ~(0xFFu << ((PinPosition % 4) << 2));
-                SYSCFG_START->EXTICR[PinPosition/4] |= GPIO_ADDRESS_TO_CODE(port) << ((PinPosition % 4) << 2); 
+                SYSCFG_START->EXTICR[PinPosition/4UL] &=  ~(0xFFUL << ((PinPosition % 4UL) << 2UL));
+                SYSCFG_START->EXTICR[PinPosition/4UL] |= GPIO_ADDRESS_TO_CODE(port) << ((PinPosition % 4UL) << 2UL); 
                 BIT_SET(EXTI_START->IMR, PinPosition);
             }
         }
@@ -57,7 +57,7 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
 void gpio_writePort( GPIOx *port, uint32_t value )
 {
     port->BSRR = 0xFFFF0000u;
-    port->BSRR = (value & 0xFFFFu);
+    port->BSRR = (value & 0xFFFFUL);
 }
 
 uint32_t gpio_readPort( GPIOx *port )
@@ -69,28 +69,28 @@ uint32_t gpio_readPort( GPIOx *port )
 
 void gpio_setPins( GPIOx *port, uint32_t pins )
 {
-    port->BSRR = (0xFFFFu & pins);
+    port->BSRR = (0xFFFFUL & pins);
 }
 
 void gpio_resetPins( GPIOx *port, uint32_t pins )
 {
-    port->BSRR = (pins << 16);
+    port->BSRR = (pins << 16UL);
 }
 
 void gpio_togglePins( GPIOx *port, uint32_t pins )
 {
-    port->ODR ^= (0xFFFFu & pins); // (no read/modify/write) avoid irq 
+    port->ODR ^= (0xFFFFUL & pins); // (no read/modify/write) avoid irq 
 }
 
 void gpio_writePins( GPIOx *port, uint32_t pins, uint32_t value )
 {
-    if(value != 0)
+    if(value != 0UL)
     {
-        port->BSRR = (0xFFFFu & pins);
+        port->BSRR = (0xFFFFUL & pins);
     }
     else
     {
-        port->BSRR = (pins << 16);
+        port->BSRR = (pins << 16UL);
     }
 }
 
@@ -98,13 +98,13 @@ uint32_t gpio_readPin( GPIOx *port, uint32_t pin )
 {
     uint32_t state;
 
-    if((port->IDR & (pin & 0xFFFFu)) != 0)
+    if((port->IDR & (pin & 0xFFFFUL)) != 0UL)
     {
-        state = 1;
+        state = 1UL;
     }
     else
     {
-        state = 0;
+        state = 0UL;
     }
 
     return state;
@@ -112,7 +112,7 @@ uint32_t gpio_readPin( GPIOx *port, uint32_t pin )
 
 void gpio_isrHandler( uint32_t pin )
 {
-    if((EXTI_START->PR & pin) != 0)
+    if((EXTI_START->PR & pin) != 0UL)
     {
         EXTI_START->PR |= pin;
         gpio_isrCallback(pin);
