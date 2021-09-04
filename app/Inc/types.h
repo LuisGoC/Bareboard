@@ -18,7 +18,7 @@
     #define LEFT_SHIFT( var, bits )   ((var) << (bits))
     #define RIGHT_SHIFT( var, bits )  ((var) >> (bits))
     //#define BIT_STATE( var, bit )     ((var) >> ((bit) & 1)) 
-    #define BIT_STATE( var, bit )     ((((var) >> (bit)) & 1UL) != 0UL ? 1UL : 0UL)
+    #define BIT_STATE( var, bit )     (((((var) >> (bit)) & 1UL) != 0UL) ? 1UL : 0UL)
     #define BIT_SET( var, bit )       ((var) |= ( 1UL << (bit)))
     #define BIT_RESET( var, bit )     ((var) &= ~(1UL << (bit)))
     #define BIT_INVERT( var, bit )    ((var) ^= ( 1UL << (bit)))

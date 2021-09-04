@@ -121,5 +121,5 @@ void gpio_isrHandler( uint32_t pin )
 
 __attribute__((weak)) void gpio_isrCallback( uint32_t pin )
 {
-    
+    (void)pin;
 }

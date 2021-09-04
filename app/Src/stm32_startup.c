@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#define SRAM_START 0x20000000u
-#define SRAM_SIZE (16 * 1024) //16Kb
+#define SRAM_START 0x20000000UL
+#define SRAM_SIZE (16UL * 1024UL) //16Kb
 #define SRAM_END ((SRAM_START) + (SRAM_SIZE))
 #define STACK_START SRAM_END
 
@@ -105,7 +105,9 @@ uint32_t vectors[] __attribute__((section(".isr_vector"))) = {
 
 void Default_Handler(void)
 {
-    while(1);
+    while(1)
+    {
+    }
 }
 
 void Reset_Handler(void)

@@ -23,31 +23,31 @@
     #define UART_MODE_RX             ((uint32_t)0x00000001)
     #define UART_MODE_TX_RX          ((uint32_t)0x00000003)
 
-    #define USART_CR1_UE     0u
-    #define USART_CR1_RE     2u
-    #define USART_CR1_TE     3u
-    #define USART_CR1_IDELIE 4u
-    #define USART_CR1_RXNEIE 5u
-    #define USART_CR1_TCIE   6u
-    #define USART_CR1_TXEIE  7u
-    #define USART_CR1_PEIE   8u
-    #define USART_CR1_PS     9u
-    #define USART_CR1_PCE    10u
-    #define USART_CR1_WAKE   11u 
-    #define USART_CR1_M0     12u
-    #define USART_CR1_MME    13u
-    #define USART_CR1_CMIE   14u
-    #define USART_CR1_OVER8  15u
-    #define USART_CR1_RTOIE  26u
-    #define USART_CR1_M1     28u
+    #define USART_CR1_UE     0UL
+    #define USART_CR1_RE     2UL
+    #define USART_CR1_TE     3UL
+    #define USART_CR1_IDELIE 4UL
+    #define USART_CR1_RXNEIE 5UL
+    #define USART_CR1_TCIE   6UL
+    #define USART_CR1_TXEIE  7UL
+    #define USART_CR1_PEIE   8UL
+    #define USART_CR1_PS     9UL
+    #define USART_CR1_PCE    10UL
+    #define USART_CR1_WAKE   11UL
+    #define USART_CR1_M0     12UL
+    #define USART_CR1_MME    13UL
+    #define USART_CR1_CMIE   14UL
+    #define USART_CR1_OVER8  15UL
+    #define USART_CR1_RTOIE  26UL
+    #define USART_CR1_M1     28UL
 
-    #define USART_CR2_STOP   12u
+    #define USART_CR2_STOP   12UL
 
-    #define USART_ISR_TXE    7u
-    #define USART_ISR_TC     6u
-    #define USART_ISR_RXNE   5u
+    #define USART_ISR_TXE    7UL
+    #define USART_ISR_TC     6UL
+    #define USART_ISR_RXNE   5UL
 
-    #define SYSTEM_CLOCK_FREQ     8000000u
+    #define SYSTEM_CLOCK_FREQ     8000000UL
 
     typedef struct
     {
@@ -59,9 +59,9 @@
         uint32_t Parity;
         uint32_t TxRxMode; 
         uint8_t *pRxData;
-        uint8_t RxLen;
+        uint32_t RxLen;
         uint8_t *pTxData;
-        uint8_t TxLen;
+        uint32_t TxLen;
     }uartConfig_t;
 
 void uart_configPort( uartConfig_t *uartH );
@@ -71,6 +71,6 @@ void uart_sendBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len );
 void uart_receiveBufferInt( uartConfig_t *uartH, uint8_t *ptr, uint32_t len );
 void uart_isrHandler( uartConfig_t *uartH );
 void uart_isrTxCallback( uartConfig_t *uartH );
-void uart_isrRxCallback( uartConfig_t *uart );
+void uart_isrRxCallback( uartConfig_t *uartH );
 
 #endif
