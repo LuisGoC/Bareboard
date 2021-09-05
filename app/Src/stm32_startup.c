@@ -113,28 +113,34 @@ void Default_Handler(void)
 void Reset_Handler(void)
 {
     //Copy .data section to SRAM
-    uint32_t size = (uint32_t)&_edata - (uint32_t)&_sdata;
+    /* cppcheck supress of an advisory rule because we need to calculate the difference between two pointer addresses by doing a conversion*/
+    uint32_t size = (uint32_t)&_edata - (uint32_t)&_sdata; /* cppcheck-suppress misra-c2012-11.4*/
 
     uint8_t *pDst = (uint8_t *)&_sdata; //sram
     uint8_t *pSrc = (uint8_t *)&_la_data; //flash
 
     for(uint32_t i = 0; i < size; i++)
     {
-        *pDst++ = *pSrc++;
+        //*pDst++ = *pSrc++;
+        *pDst = *pSrc;
+        pDst++; 
+        pSrc++;
     }
 
     //Initialize .bss section to zero
-    size = (uint32_t)&_ebss - (uint32_t)&_sbss;
+    /* cppcheck supress of an advisory rule because we need to calculate the difference between two pointer addresses by doing a conversion*/
+    size = (uint32_t)&_ebss - (uint32_t)&_sbss; /* cppcheck-suppress misra-c2012-11.4*/
     pDst = (uint8_t *)&_sbss;
 
     for(uint32_t i = 0; i < size; i++)
     {
-        *pDst++ = 0;
+        *pDst = 0;
+        pDst++;
     }
 
     //Call library function
     __libc_init_array();
 
     //call main()
-    main();
+    (void)main();
 }

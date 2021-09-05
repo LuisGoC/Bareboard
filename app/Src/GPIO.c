@@ -30,24 +30,28 @@ void gpio_configPort( GPIOx *port, gpioConfig_t *config )
                 /*Interrupt mode*/
                 if(config->Mode == GPIO_MODE_IT_FALLING)
                 {
-                    BIT_SET(EXTI_START->FTSR, PinPosition);
-                    BIT_RESET(EXTI_START->RTSR, PinPosition);
+                    /* cppcheck supress of an advisory rule because we need to modify a pointer to variable register value */
+                    BIT_SET(EXTI_START->FTSR, PinPosition); /* cppcheck-suppress misra-c2012-11.4*/
+                    BIT_RESET(EXTI_START->RTSR, PinPosition); /* cppcheck-suppress misra-c2012-11.4*/
                 }
                 if(config->Mode == GPIO_MODE_IT_RISING)
                 {
-                    BIT_SET(EXTI_START->RTSR, PinPosition);
-                    BIT_RESET(EXTI_START->FTSR, PinPosition);
+                    /* cppcheck supress of an advisory rule because we need to modify a pointer to variable register value */
+                    BIT_SET(EXTI_START->RTSR, PinPosition); /* cppcheck-suppress misra-c2012-11.4*/
+                    BIT_RESET(EXTI_START->FTSR, PinPosition); /* cppcheck-suppress misra-c2012-11.4*/
                 }
                 if(config->Mode == GPIO_MODE_IT_BOTH)
                 {
-                    BIT_SET(EXTI_START->FTSR, PinPosition);
-                    BIT_SET(EXTI_START->RTSR, PinPosition);
+                    /* cppcheck supress of an advisory rule because we need to modify a pointer to variable register value */
+                    BIT_SET(EXTI_START->FTSR, PinPosition); /* cppcheck-suppress misra-c2012-11.4*/
+                    BIT_SET(EXTI_START->RTSR, PinPosition); /* cppcheck-suppress misra-c2012-11.4*/
                 } 
                 
-                RCC_SYSCFG_CLOCK_ON();
-                SYSCFG_START->EXTICR[PinPosition/4UL] &=  ~(0xFFUL << ((PinPosition % 4UL) << 2UL));
-                SYSCFG_START->EXTICR[PinPosition/4UL] |= GPIO_ADDRESS_TO_CODE(port) << ((PinPosition % 4UL) << 2UL); 
-                BIT_SET(EXTI_START->IMR, PinPosition);
+                RCC_SYSCFG_CLOCK_ON(); /* cppcheck-suppress misra-c2012-11.4*/
+                SYSCFG_START->EXTICR[PinPosition/4UL] &=  ~(0xFFUL << ((PinPosition % 4UL) << 2UL)); /* cppcheck-suppress misra-c2012-11.4*/
+                SYSCFG_START->EXTICR[PinPosition/4UL] |= GPIO_ADDRESS_TO_CODE(port) << ((PinPosition % 4UL) << 2UL); /* cppcheck-suppress misra-c2012-11.4*/
+                BIT_SET(EXTI_START->IMR, PinPosition); /* cppcheck-suppress misra-c2012-11.4*/
+                /* cppcheck supress of an advisory rule because we need to modify a pointer to variable register value */
             }
         }
         PinPosition++;
@@ -112,9 +116,10 @@ uint32_t gpio_readPin( GPIOx *port, uint32_t pin )
 
 void gpio_isrHandler( uint32_t pin )
 {
-    if((EXTI_START->PR & pin) != 0UL)
+    if((EXTI_START->PR & pin) != 0UL) /* cppcheck-suppress misra-c2012-11.4*/
     {
-        EXTI_START->PR |= pin;
+        /* cppcheck supress of an advisory rule because we need to modify a pointer to variable register value */
+        EXTI_START->PR |= pin; /* cppcheck-suppress misra-c2012-11.4*/
         gpio_isrCallback(pin);
     }
 }
